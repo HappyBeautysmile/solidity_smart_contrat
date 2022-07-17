@@ -4,8 +4,11 @@ import { Contract } from "ethers";
 import { ethers } from "hardhat";
 import { converter } from "../../helpers/unit-converter";
 
-describe("002.FirstApp", () => {
-  let etherStore: Contract, attack: Contract;
+describe("001.Reentrancy", () => {
+  let etherStore: Contract,
+    attack1: Contract,
+    safeEtherStore: Contract,
+    attack2: Contract;
   let one: SignerWithAddress, two: SignerWithAddress, three: SignerWithAddress;
 
   before(async () => {
@@ -17,9 +20,17 @@ describe("002.FirstApp", () => {
     etherStore = await EtherStore.deploy();
     await etherStore.deployed();
 
-    const Attack = await ethers.getContractFactory("Attack001");
-    attack = await Attack.deploy(etherStore.address);
-    await attack.deployed();
+    const Attack1 = await ethers.getContractFactory("Attack001");
+    attack1 = await Attack1.deploy(etherStore.address);
+    await attack1.deployed();
+
+    const SafeEtherStore = await ethers.getContractFactory("SafeEtherStore001");
+    safeEtherStore = await SafeEtherStore.deploy();
+    await safeEtherStore.deployed();
+
+    const Attack2 = await ethers.getContractFactory("Attack002");
+    attack2 = await Attack2.deploy(safeEtherStore.address);
+    await attack2.deployed();
   });
 
   describe("Validations", () => {
@@ -86,15 +97,53 @@ describe("002.FirstApp", () => {
       });
 
       it("Attack001 : function : attack : success", async () => {
-        const preAttackBalance = await attack.getBalance();
+        const preAttackBalance = await attack1.getBalance();
         expect(preAttackBalance).to.equal(0);
 
-        const attackTx = await attack.attack({
+        const attack1Tx = await attack1.attack({
           value: converter(1, "ether", "wei"),
         });
-        await attackTx.wait();
+        await attack1Tx.wait();
 
-        const curAttackBalance = await attack.getBalance();
+        const curAttackBalance = await attack1.getBalance();
+        expect(curAttackBalance).to.equal(converter(3, "ether", "wei"));
+      });
+    });
+
+    describe("SafeEtherStore001", async () => {
+      it("SafeEtherStore001 : function : deposit : success", async () => {
+        const depositTx2 = await safeEtherStore.connect(two).deposit({
+          value: converter(1, "ether", "wei"),
+        });
+        await depositTx2.wait();
+
+        const depositTx3 = await safeEtherStore
+          .connect(three)
+          .deposit({ value: converter(1, "ether", "wei") });
+        await depositTx3.wait();
+
+        const balance = await safeEtherStore.getBalance();
+        expect(balance).to.equal(converter(2, "ether", "wei"));
+      });
+
+      it("Attack002 : function : attack : fail : lock", async () => {
+        const safeEtherStoreAddress = await attack2.etherStore();
+        expect(safeEtherStoreAddress).to.equal(safeEtherStore.address);
+
+        console.log("safeEtherStoreAddress", safeEtherStoreAddress);
+        console.log("safeEtherStore.address :>> ", safeEtherStore.address);
+        const preAttackBalance = await attack2.getBalance();
+        expect(preAttackBalance).to.equal(0);
+        console.log("preAttackBalance :>> ", preAttackBalance);
+
+        const attack2Tx = attack2.attack({
+          value: converter(1, "ether", "wei"),
+        });
+
+        await expect(attack2Tx).to.revertedWith("No re-entrancy");
+
+        const curAttackBalance = await attack2.getBalance();
+        console.log("curAttackBalance", curAttackBalance);
         expect(curAttackBalance).to.equal(converter(3, "ether", "wei"));
       });
     });
