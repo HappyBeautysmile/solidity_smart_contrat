@@ -3,4 +3,5 @@
 /* eslint-disable */
 export * as firstAppSol from "./FirstApp.sol";
 export * as helloWorldSol from "./HelloWorld.sol";
+export * as hacks from "./hacks";
 export { Lock__factory } from "./Lock__factory";
