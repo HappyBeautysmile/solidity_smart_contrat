@@ -6,8 +6,8 @@ import { converter } from "../../helpers/unit-converter";
 
 describe("001.Reentrancy", () => {
   let etherStore: Contract,
-    attack1: Contract,
     safeEtherStore: Contract,
+    attack1: Contract,
     attack2: Contract;
   let one: SignerWithAddress, two: SignerWithAddress, three: SignerWithAddress;
 
@@ -127,24 +127,26 @@ describe("001.Reentrancy", () => {
       });
 
       it("Attack002 : function : attack : fail : lock", async () => {
-        const safeEtherStoreAddress = await attack2.etherStore();
+        const safeEtherStoreAddress = await attack2.safeEtherStore();
         expect(safeEtherStoreAddress).to.equal(safeEtherStore.address);
 
-        console.log("safeEtherStoreAddress", safeEtherStoreAddress);
-        console.log("safeEtherStore.address :>> ", safeEtherStore.address);
         const preAttackBalance = await attack2.getBalance();
         expect(preAttackBalance).to.equal(0);
-        console.log("preAttackBalance :>> ", preAttackBalance);
+
+        const preStoreBalance = await safeEtherStore.getBalance();
+        expect(preStoreBalance).to.equal(converter(2, "ether", "wei"));
 
         const attack2Tx = attack2.attack({
           value: converter(1, "ether", "wei"),
         });
 
-        await expect(attack2Tx).to.revertedWith("No re-entrancy");
+        await expect(attack2Tx).to.revertedWith("Failed to send Ether");
 
         const curAttackBalance = await attack2.getBalance();
-        console.log("curAttackBalance", curAttackBalance);
-        expect(curAttackBalance).to.equal(converter(3, "ether", "wei"));
+        expect(curAttackBalance).to.equal(0);
+
+        const curStoreBalance = await safeEtherStore.getBalance();
+        expect(curStoreBalance).to.equal(converter(2, "ether", "wei"));
       });
     });
   });

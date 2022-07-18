@@ -36,7 +36,7 @@ Here is how the functions were called
 contract EtherStore001 {
     mapping(address => uint256) public balances;
 
-    function deposit() public payable {
+    function deposit() public payable virtual {
         balances[msg.sender] += msg.value;
     }
 
@@ -69,7 +69,7 @@ contract Attack001 {
         }
     }
 
-    function attack() external payable virtual {
+    function attack() external payable {
         require(msg.value >= 1 ether, "Minimum is 1 ether");
         etherStore.deposit{value: 1 ether}();
         etherStore.withdraw();
@@ -86,23 +86,80 @@ Preventative Techniques
 - Use function modifiers that prevent re-entrancy
 Here is a example of a re-entracy guard
 */
-contract ReEntrancyGuard {
-    bool internal locked;
+abstract contract ReentrancyGuard {
+    // Booleans are more expensive than uint256 or any type that takes up a full
+    // word because each write operation emits an extra SLOAD to first read the
+    // slot's contents, replace the bits taken up by the boolean, and then write
+    // back. This is the compiler's defense against contract upgrades and
+    // pointer aliasing, and it cannot be disabled.
 
-    modifier noReentrant() {
-        require(!locked, "No re-entrancy");
-        locked = true;
+    // The values being non-zero value makes deployment a bit more expensive,
+    // but in exchange the refund on every call to nonReentrant will be lower in
+    // amount. Since refunds are capped to a percentage of the total
+    // transaction's gas, it is best to keep them low in cases like this one, to
+    // increase the likelihood of the full refund coming into effect.
+    uint256 private constant _NOT_ENTERED = 1;
+    uint256 private constant _ENTERED = 2;
+
+    uint256 private _status;
+
+    constructor() {
+        _status = _NOT_ENTERED;
+    }
+
+    /**
+     * @dev Prevents a contract from calling itself, directly or indirectly.
+     * Calling a `nonReentrant` function from another `nonReentrant`
+     * function is not supported. It is possible to prevent this from happening
+     * by making the `nonReentrant` function external, and making it call a
+     * `private` function that does the actual work.
+     */
+    modifier nonReentrant() {
+        // On the first call to nonReentrant, _notEntered will be true
+        require(_status != _ENTERED, "ReentrancyGuard: reentrant call");
+
+        // Any calls to nonReentrant after this point will fail
+        _status = _ENTERED;
+
         _;
-        locked = false;
+
+        // By storing the original value once again, a refund is triggered (see
+        // https://eips.ethereum.org/EIPS/eip-2200)
+        _status = _NOT_ENTERED;
     }
 }
 
-contract SafeEtherStore001 is EtherStore001, ReEntrancyGuard {
-    function withdraw() public override noReentrant {}
+contract SafeEtherStore001 is EtherStore001, ReentrancyGuard {
+    function deposit() public payable override nonReentrant {
+        super.deposit();
+    }
+
+    function withdraw() public override nonReentrant {
+        super.withdraw();
+    }
 }
 
-contract Attack002 is Attack001 {
-    constructor(address _safeEtherStore) Attack001(_safeEtherStore) {}
+contract Attack002 {
+    SafeEtherStore001 public safeEtherStore;
 
-    function attack() external payable override {}
+    constructor(address _safeEtherStoreAddress) {
+        safeEtherStore = SafeEtherStore001(_safeEtherStoreAddress);
+    }
+
+    // Receive is called when EtherStore sends Ether to this contract.
+    receive() external payable {
+        if (address(safeEtherStore).balance >= 1 ether) {
+            safeEtherStore.withdraw();
+        }
+    }
+
+    function attack() external payable {
+        require(msg.value >= 1 ether, "Minimum is 1 ether");
+        safeEtherStore.deposit{value: 1 ether}();
+        safeEtherStore.withdraw();
+    }
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
 }
