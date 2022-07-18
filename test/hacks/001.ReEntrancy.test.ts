@@ -6,8 +6,8 @@ import { converter } from "../../helpers/unit-converter";
 
 describe("001.Reentrancy", () => {
   let etherStore: Contract,
-    attack1: Contract,
     safeEtherStore: Contract,
+    attack1: Contract,
     attack2: Contract;
   let one: SignerWithAddress, two: SignerWithAddress, three: SignerWithAddress;
 
@@ -136,16 +136,17 @@ describe("001.Reentrancy", () => {
         const preStoreBalance = await safeEtherStore.getBalance();
         expect(preStoreBalance).to.equal(converter(2, "ether", "wei"));
 
-        const attack2Tx = await attack2.attack({
+        const attack2Tx = attack2.attack({
           value: converter(1, "ether", "wei"),
         });
-        await attack2Tx.wait();
+
+        await expect(attack2Tx).to.revertedWith("Failed to send Ether");
 
         const curAttackBalance = await attack2.getBalance();
         expect(curAttackBalance).to.equal(0);
 
         const curStoreBalance = await safeEtherStore.getBalance();
-        expect(curStoreBalance).to.equal(converter(3, "ether", "wei"));
+        expect(curStoreBalance).to.equal(converter(2, "ether", "wei"));
       });
     });
   });

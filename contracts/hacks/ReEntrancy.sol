@@ -36,7 +36,7 @@ Here is how the functions were called
 contract EtherStore001 {
     mapping(address => uint256) public balances;
 
-    function deposit() public payable {
+    function deposit() public payable virtual {
         balances[msg.sender] += msg.value;
     }
 
@@ -130,14 +130,20 @@ abstract contract ReentrancyGuard {
 }
 
 contract SafeEtherStore001 is EtherStore001, ReentrancyGuard {
-    function withdraw() public override nonReentrant {}
+    function deposit() public payable override nonReentrant {
+        super.deposit();
+    }
+
+    function withdraw() public override nonReentrant {
+        super.withdraw();
+    }
 }
 
 contract Attack002 {
     SafeEtherStore001 public safeEtherStore;
 
-    constructor(address _etherStoreAddress) {
-        safeEtherStore = SafeEtherStore001(_etherStoreAddress);
+    constructor(address _safeEtherStoreAddress) {
+        safeEtherStore = SafeEtherStore001(_safeEtherStoreAddress);
     }
 
     // Receive is called when EtherStore sends Ether to this contract.
