@@ -8,7 +8,7 @@ describe("002.FirstApp", () => {
   before(async () => {
     const Counter = await ethers.getContractFactory("Counter002");
     counter = await Counter.deploy();
-    counter.deployed();
+    await counter.deployed();
   });
 
   describe("Validations", () => {
