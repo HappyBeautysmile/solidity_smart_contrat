@@ -40,4 +40,8 @@ contract Payable {
         (bool success, ) = _to.call{value: _amount}("");
         require(success, "Failed to send Ether");
     }
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
 }
