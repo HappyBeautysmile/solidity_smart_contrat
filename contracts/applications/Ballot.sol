@@ -94,7 +94,7 @@ contract Ballot {
         Voter storage delegate_ = voters[_to];
 
         // Voters cannot delegate to accounts that cannot vote.
-        require(delegate_.weight >= 1);
+        require(delegate_.weight >= 1, "Can't delegate to not voter.");
 
         // Since `sender` is a reference, this
         // modifies `voters[msg.sender]`.
