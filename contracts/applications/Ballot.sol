@@ -62,7 +62,7 @@ contract Ballot {
             "Only chairperson can give right to vote."
         );
         require(!voters[_voter].voted, "The voter already voted.");
-        require(voters[_voter].weight == 0);
+        require(voters[_voter].weight == 0, "Already became voter.");
 
         voters[_voter].weight = 1;
     }
@@ -145,5 +145,9 @@ contract Ballot {
     // returns the name of the winner
     function winnerName() external view returns (bytes32 winnerName_) {
         winnerName_ = proposals[winningProposal()].name;
+    }
+
+    function getProposalsLength() external view returns (uint256) {
+        return proposals.length;
     }
 }
