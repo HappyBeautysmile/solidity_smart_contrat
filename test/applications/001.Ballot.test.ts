@@ -21,11 +21,14 @@ describe("001.Ballot", () => {
     three: SignerWithAddress,
     four: SignerWithAddress,
     five: SignerWithAddress,
+    six: SignerWithAddress,
+    seven: SignerWithAddress,
     voters: SignerWithAddress[];
 
   before(async () => {
-    [owner, notOwner, two, three, four, five] = await ethers.getSigners();
-    voters = [two, three, four, five];
+    [owner, notOwner, two, three, four, five, six, seven] =
+      await ethers.getSigners();
+    voters = [two, three, four, five, six, seven];
 
     const Ballot = await ethers.getContractFactory("Ballot");
     ballot = await Ballot.deploy(bytesProposals);
@@ -183,48 +186,43 @@ describe("001.Ballot", () => {
         expect(curVoteCount).to.equal(2); // voteCount increase
       });
 
-      // it("Failed : Only chairperson can give right to vote", async () => {
-      //   for (let i = 0; i < voters.length; i++) {
-      //     const giveRightToVoteTx = ballot
-      //       .connect(notOwner)
-      //       .giveRightToVote(voters[i].address);
+      it("Failed : You have no right to vote.", async () => {
+        const delegateTx = ballot.connect(notOwner).delegate(two.address);
 
-      //     await expect(giveRightToVoteTx).to.revertedWith(
-      //       "Only chairperson can give right to vote."
-      //     );
-      //   }
-      // });
+        await expect(delegateTx).to.revertedWith("You have no right to vote.");
+      });
 
-      // it("Failed : The voter already voted.", async () => {
-      //   for (let i = 0; i < voters.length; i++) {
-      //     const giveRightToVoteTx = ballot.giveRightToVote(voters[i].address);
+      it("Failed : You already voted.", async () => {
+        const delegateTx = ballot.connect(two).delegate(three.address);
 
-      //     await expect(giveRightToVoteTx).to.revertedWith(
-      //       "Already became voter."
-      //     );
-      //   }
-      // });
+        await expect(delegateTx).to.revertedWith("You already voted.");
+      });
 
-      // it("Vote : Success : two : to `For`", async () => {
-      //   const voteTx = await ballot.connect(two).vote(0);
-      //   await voteTx.wait();
+      it("Failed : Self-delegation is disallowed.", async () => {
+        const delegateTx = ballot.connect(owner).delegate(owner.address);
 
-      //   const { weight, voted, delegate, vote } = await ballot.voters(
-      //     two.address
-      //   );
-      //   expect(weight).to.equal(1);
-      //   expect(voted).to.equal(true);
-      //   expect(delegate).to.equal(ZERO_ADDRESS);
-      //   expect(vote).to.equal(0);
-      // });
+        await expect(delegateTx).to.revertedWith(
+          "Self-delegation is disallowed."
+        );
+      });
 
-      // it("Failed : The voter already voted", async () => {
-      //   const giveRightToVoteTx = ballot.giveRightToVote(two.address);
+      it("Failed : Found loop in delegation.", async () => {
+        const delegateTx = ballot.connect(four).delegate(three.address);
 
-      //   await expect(giveRightToVoteTx).to.revertedWith(
-      //     "The voter already voted."
-      //   );
-      // });
+        await expect(delegateTx).to.revertedWith("Found loop in delegation.");
+      });
+
+      it("Failed : Can't delegate to not voter.", async () => {
+        const delegateTx = ballot.connect(four).delegate(notOwner.address);
+
+        await expect(delegateTx).to.revertedWith(
+          "Can't delegate to not voter."
+        );
+      });
+    });
+    describe("vote : and check result", async () => {
+      it("Validation : winningProposal");
+      it("Validation : winnerName");
     });
   });
 });
