@@ -221,8 +221,17 @@ describe("001.Ballot", () => {
       });
     });
     describe("vote : and check result", async () => {
-      it("Validation : winningProposal");
-      it("Validation : winnerName");
+      it("vote has to completed");
+
+      it("Validation : winningProposal : For 0 , Against 0, Abstain 2", async () => {
+        const winningProposal = await ballot.winningProposal();
+        expect(winningProposal).to.equal(2);
+      });
+
+      it("Validation : winnerName", async () => {
+        const winnerName = await ballot.winnerName();
+        expect(winnerName).to.equal(bytesProposals[2]);
+      });
     });
   });
 });
