@@ -7,14 +7,16 @@ import { converter } from "../helpers/unit-converter";
 
 describe("106.Payable", () => {
   let payable: Contract;
-  let one: SignerWithAddress, two: SignerWithAddress, three: SignerWithAddress;
+  let deployer: SignerWithAddress,
+    one: SignerWithAddress,
+    two: SignerWithAddress;
 
   before(async () => {
     const Payable = await ethers.getContractFactory("Payable");
     payable = await Payable.deploy();
     await payable.deployed();
 
-    [one, two, three] = await ethers.getSigners();
+    [deployer, one, two] = await ethers.getSigners();
   });
 
   describe("Payable", async () => {
@@ -45,18 +47,18 @@ describe("106.Payable", () => {
     });
 
     it("Function : withdraw : Success : consider gas fee", async () => {
-      const preBalance = await ethers.provider.getBalance(one.address);
+      const preBalance = await ethers.provider.getBalance(deployer.address);
 
       const withdrawTx = await payable.withdraw();
       await withdrawTx.wait();
 
-      const curBalance = await ethers.provider.getBalance(one.address);
+      const curBalance = await ethers.provider.getBalance(deployer.address);
 
       expect(preBalance).not.to.equal(curBalance);
     });
 
     it("Function : transfer : Success", async () => {
-      const preTwoBalance = await ethers.provider.getBalance(two.address);
+      const preTwoBalance = await ethers.provider.getBalance(one.address);
       expect(preTwoBalance).to.equal(converter(10000, "ether", "wei"));
 
       const prePayableBalance = await payable.getBalance();
@@ -71,7 +73,7 @@ describe("106.Payable", () => {
       expect(depositedPayableBalance).to.equal(converter(1, "ether", "wei"));
 
       const transferTx = await payable.transfer(
-        two.address,
+        one.address,
         converter(1, "ether", "wei")
       );
       await transferTx.wait();
@@ -79,7 +81,7 @@ describe("106.Payable", () => {
       const curPayableBalance = await payable.getBalance();
       expect(curPayableBalance).to.equal(0);
 
-      const curTwoBalance = await ethers.provider.getBalance(two.address);
+      const curTwoBalance = await ethers.provider.getBalance(one.address);
       expect(curTwoBalance).to.equal(converter(10001, "ether", "wei"));
     });
   });
