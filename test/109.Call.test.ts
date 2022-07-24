@@ -11,10 +11,12 @@ import { converter } from "../helpers/unit-converter";
 describe("109.Call", () => {
   let receiver: Contract, caller: Contract;
 
-  let one: SignerWithAddress, two: SignerWithAddress, three: SignerWithAddress;
+  let deployer: SignerWithAddress,
+    one: SignerWithAddress,
+    two: SignerWithAddress;
 
   before(async () => {
-    [one, two, three] = await ethers.getSigners();
+    [deployer, one, two] = await ethers.getSigners();
 
     const Receiver = await ethers.getContractFactory("Receiver");
     receiver = await Receiver.deploy();
@@ -36,7 +38,11 @@ describe("109.Call", () => {
 
       await expect(fooTx)
         .to.emit(receiver, "Received")
-        .withArgs(one.address, converter(1, "ether", "wei"), "hello world");
+        .withArgs(
+          deployer.address,
+          converter(1, "ether", "wei"),
+          "hello world"
+        );
 
       const curBalance = await receiver.getBalance();
       expect(curBalance).to.equal(converter(1, "ether", "wei"));
