@@ -24,6 +24,8 @@ contract Primitives {
     uint256 public u256 = 456;
     uint256 public u = 123; // uint is an alias for uint256
 
+    uint256 public minUint = type(uint256).min;
+    uint256 public maxUint = type(uint256).max;
     /**
     Negative numbers are allowed for int types.
     Like uint, different ranges are available from int8 to int256
@@ -40,7 +42,7 @@ contract Primitives {
     int256 public minInt = type(int256).min;
     int256 public maxInt = type(int256).max;
 
-    address public addr = 0xCA35b7d915458EF540aDe6068dFe2F44E8fa733c;
+    address public addr = msg.sender;
 
     /**
     In Solidity, the data type byte represent a sequence of bytes.
@@ -52,8 +54,8 @@ contract Primitives {
     The term bytes in Solidity represents a dynamic array of bytes
     It's a shorthand for byte[] .
      */
-    bytes1 a = 0xb5; // [10110101]
-    bytes1 b = 0x56; // [01010110]
+    bytes1 aa = 0xb5; // [10110101]
+    bytes1 bb = 0x56; // [01010110]
 
     // Default values
     // Unassigned variables have a default value
