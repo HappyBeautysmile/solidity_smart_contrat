@@ -20,6 +20,7 @@
     "@types/chai": "^4.3.1",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
+    "big-integer": "^1.6.51",
     "chai": "^4.3.6",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
