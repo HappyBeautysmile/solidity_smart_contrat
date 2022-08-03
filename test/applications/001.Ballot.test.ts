@@ -221,7 +221,7 @@ describe("001.Ballot", () => {
       });
     });
     describe("vote : and check result", async () => {
-      it("vote has to completed");
+      it("vote has to completed", async () => {});
 
       it("Validation : winningProposal : For 0 , Against 0, Abstain 2", async () => {
         const winningProposal = await ballot.winningProposal();
