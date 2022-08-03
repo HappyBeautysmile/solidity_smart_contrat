@@ -35,7 +35,7 @@ describe("119.GasOptimizations", () => {
       originGasConsumption = sumIfEvenAndLessThan99Tx.gasPrice;
     });
 
-    it(`Function : first : Success`, async () => {
+    it(`Function : first : Success : less than originGasConsumption`, async () => {
       const firstTx = await gasGolf.first(SAMPLE);
       await firstTx.wait();
 
@@ -46,7 +46,7 @@ describe("119.GasOptimizations", () => {
       expect(firstGasConsumption).to.lessThan(originGasConsumption);
     });
 
-    it(`Function : second : Success`, async () => {
+    it(`Function : second : Success : less than firstGasConsumption`, async () => {
       const secondTx = await gasGolf.second(SAMPLE);
       await secondTx.wait();
 
@@ -57,7 +57,7 @@ describe("119.GasOptimizations", () => {
       expect(secondGasConsumption).to.lessThan(firstGasConsumption);
     });
 
-    it(`Function : third : Success`, async () => {
+    it(`Function : third : Success : less than secondGasConsumption`, async () => {
       const thirdTx = await gasGolf.third(SAMPLE);
       await thirdTx.wait();
 
@@ -68,7 +68,7 @@ describe("119.GasOptimizations", () => {
       expect(thirdGasConsumption).to.lessThan(secondGasConsumption);
     });
 
-    it(`Function : last : Success`, async () => {
+    it(`Function : last : Success : less than thirdGasConsumption : Gas optimizations`, async () => {
       const lastTx = await gasGolf.last(SAMPLE);
       await lastTx.wait();
 
