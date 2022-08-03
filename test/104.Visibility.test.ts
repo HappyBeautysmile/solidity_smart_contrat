@@ -23,9 +23,7 @@ describe("104.Visibility", () => {
           expect(publicVar).to.equal("my public variable");
         });
 
-        it.skip(
-          "Variable : call : externalVar : Skip : external is not available"
-        );
+        it("Variable : call : externalVar : Skip : external is not available", async () => {});
 
         it("Variable : call : internalVar : Failed : not visible variable", async () => {
           try {

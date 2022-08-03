@@ -53,9 +53,9 @@ describe("105.Interface", () => {
     });
 
     describe("UniswapExample", async () => {
-      it.skip("Only available in Ethereum Mainnet", async () => {
-        const getTokenReserves = await uniswapExample.getTokenReserves();
-        console.log("getTokenReserves", getTokenReserves);
+      it("Only available in Ethereum Mainnet", async () => {
+        // const getTokenReserves = await uniswapExample.getTokenReserves();
+        // console.log("getTokenReserves", getTokenReserves);
       });
     });
   });
