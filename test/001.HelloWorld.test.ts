@@ -8,7 +8,7 @@ describe("001.HelloWorld", () => {
   before(async () => {
     const HelloWorld = await ethers.getContractFactory("HelloWorld001");
     helloWorld = await HelloWorld.deploy();
-    helloWorld.deployed();
+    await helloWorld.deployed();
   });
 
   describe("Validations", () => {
