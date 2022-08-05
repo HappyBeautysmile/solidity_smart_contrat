@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
+/**
+If / Else
+
+Solidity supports conditional statements if, else if and else.
+*/
+
 contract IfElse {
     function foo(uint256 _x) public pure returns (uint256) {
         if (_x < 10) {
