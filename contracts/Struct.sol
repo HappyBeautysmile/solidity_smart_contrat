@@ -55,3 +55,10 @@ contract Todos {
         todo.completed = !todo.completed;
     }
 }
+
+import "./helpers/Todo001.sol";
+
+contract Todos001 {
+    // An array of 'Todo' structs;
+    Todo001[] public todos;
+}
