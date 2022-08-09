@@ -54,6 +54,10 @@ contract Todos {
         Todo storage todo = todos[_index];
         todo.completed = !todo.completed;
     }
+
+    function length() public view returns (uint256) {
+        return todos.length;
+    }
 }
 
 import "./helpers/Todo001.sol";
