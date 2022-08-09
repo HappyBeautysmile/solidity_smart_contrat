@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx hardhat test"
+    "test": "npx hardhat test",
+    "clean": "rm -rf artifacts/ & rm -rf cache/ & rm -rf typechain-types"
   },
   "keywords": [],
   "author": "",
