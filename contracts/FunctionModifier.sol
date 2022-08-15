@@ -16,6 +16,7 @@ contract FunctionModifier {
     // modifiers.
     address public owner;
     uint256 public x = 10;
+    uint256 public y = 10;
     bool public locked;
 
     constructor() {
@@ -48,6 +49,13 @@ contract FunctionModifier {
         owner = _newOwner;
     }
 
+    function recursion() public {
+        while (x < 20) {
+            x++;
+            recursion();
+        }
+    }
+
     // Modifiers can be called before and / or after a function.
     // This modifier prevents a function from being called while
     // it is still executing.
@@ -59,11 +67,10 @@ contract FunctionModifier {
         locked = false;
     }
 
-    function decrement(uint256 _i) public noReentrancy {
-        x -= _i;
-
-        if (x > 1) {
-            decrement(_i - 1);
+    function recursionWithNoReentrancy() public noReentrancy {
+        while (y < 20) {
+            y++;
+            recursionWithNoReentrancy();
         }
     }
 }
