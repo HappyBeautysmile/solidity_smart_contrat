@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Contract } from "ethers";
 import { ethers } from "hardhat";
 
-describe("102.ShadowingInheritedStateVariables", () => {
+describe("024.ShadowingInheritedStateVariables", () => {
   let contractA: Contract, contractC: Contract;
 
   before(async () => {

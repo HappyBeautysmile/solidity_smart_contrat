@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Contract } from "ethers";
 import { ethers } from "hardhat";
 
-describe("105.Interface", () => {
+describe("027.Interface", () => {
   let counter: Contract, myContract: Contract, uniswapExample: Contract;
 
   before(async () => {

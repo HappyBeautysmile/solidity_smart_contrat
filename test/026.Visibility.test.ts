@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Contract } from "ethers";
 import { ethers } from "hardhat";
 
-describe("104.Visibility", () => {
+describe("026.Visibility", () => {
   let base: Contract, child: Contract;
 
   before(async () => {

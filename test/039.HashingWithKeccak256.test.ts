@@ -1,10 +1,9 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-
 import { expect } from "chai";
 import { Contract } from "ethers";
 import { ethers } from "hardhat";
 
-describe("117.HashingWithKeccak256", () => {
+describe("039.HashingWithKeccak256", () => {
   let hashFunction: Contract, guessTheMagicWord: Contract;
   let deployer: SignerWithAddress;
 
