@@ -1,12 +1,7 @@
-import { PANIC_CODES } from "@nomicfoundation/hardhat-chai-matchers/panic";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-
 import { expect } from "chai";
-import { Contract, ContractFactory } from "ethers";
+import { Contract } from "ethers";
 import { ethers } from "hardhat";
-
-import { ZERO_ADDRESS } from "../helpers/constant";
-import { converter } from "../helpers/unit-converter";
 
 describe("036.Import", () => {
   let importContract: Contract;

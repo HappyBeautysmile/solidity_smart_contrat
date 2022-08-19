@@ -1,9 +1,9 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-
 import bigInt from "big-integer";
 import { expect } from "chai";
-import { Contract, utils } from "ethers";
+import { Contract } from "ethers";
 import { ethers } from "hardhat";
+
 import { ZERO_ADDRESS } from "../helpers/constant";
 
 describe("003.PrimitiveDataTypes", () => {
