@@ -58,7 +58,7 @@ describe("028.Payable", () => {
     });
 
     it("Function : transfer : Success", async () => {
-      const preTwoBalance = await ethers.provider.getBalance(one.address);
+      const preTwoBalance = await ethers.provider.getBalance(two.address);
       expect(preTwoBalance).to.equal(converter(10000, "ether", "wei"));
 
       const prePayableBalance = await payable.getBalance();
@@ -73,7 +73,7 @@ describe("028.Payable", () => {
       expect(depositedPayableBalance).to.equal(converter(1, "ether", "wei"));
 
       const transferTx = await payable.transfer(
-        one.address,
+        two.address,
         converter(1, "ether", "wei")
       );
       await transferTx.wait();
@@ -81,7 +81,7 @@ describe("028.Payable", () => {
       const curPayableBalance = await payable.getBalance();
       expect(curPayableBalance).to.equal(0);
 
-      const curTwoBalance = await ethers.provider.getBalance(one.address);
+      const curTwoBalance = await ethers.provider.getBalance(two.address);
       expect(curTwoBalance).to.equal(converter(10001, "ether", "wei"));
     });
   });
