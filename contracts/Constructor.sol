@@ -69,7 +69,7 @@ contract D002 is X, Y {
 //  2. Y
 //  3. E
 
-contract E is X, Y {
+contract E002 is X, Y {
     event ECall();
 
     constructor() Y("Y was called") X("X was called") {
