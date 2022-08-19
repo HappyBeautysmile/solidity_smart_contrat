@@ -8,7 +8,7 @@ import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../helpers/constant";
 import { converter } from "../helpers/unit-converter";
 
-describe("115.Library", () => {
+describe("037.Library", () => {
   let testSafeMath: Contract, testArray: Contract;
   let deployer: SignerWithAddress;
 

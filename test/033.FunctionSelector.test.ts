@@ -8,7 +8,7 @@ import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../helpers/constant";
 import { converter } from "../helpers/unit-converter";
 
-describe("111.FunctionSelector", () => {
+describe("033.FunctionSelector", () => {
   let functionSelector: Contract;
 
   let deployer: SignerWithAddress;

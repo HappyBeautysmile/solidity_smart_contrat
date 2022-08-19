@@ -4,7 +4,7 @@ import { expect } from "chai";
 import { Contract } from "ethers";
 import { ethers } from "hardhat";
 
-describe("119.GasOptimizations", () => {
+describe("041.GasOptimizations", () => {
   const SAMPLE = Array.from({ length: 100 }, (_, idx) => idx + 1); // 1 ~ 100
 
   let gasGolf: Contract;

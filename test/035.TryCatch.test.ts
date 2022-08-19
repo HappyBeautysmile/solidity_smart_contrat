@@ -8,7 +8,7 @@ import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../helpers/constant";
 import { converter } from "../helpers/unit-converter";
 
-describe("113.TryCatch", () => {
+describe("035.TryCatch", () => {
   let Foo: ContractFactory;
   let foo: Contract, bar: Contract;
 

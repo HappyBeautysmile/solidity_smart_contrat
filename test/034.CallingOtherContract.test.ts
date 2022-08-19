@@ -8,7 +8,7 @@ import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../helpers/constant";
 import { converter } from "../helpers/unit-converter";
 
-describe("112.CallingOtherContract", () => {
+describe("034.CallingOtherContract", () => {
   let callee001: Contract, caller001: Contract;
 
   let deployer: SignerWithAddress;

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Contract } from "ethers";
 import { ethers } from "hardhat";
 
-describe("101.Inheritance", () => {
+describe("023.Inheritance", () => {
   let contractA: Contract,
     contractB: Contract,
     contractC: Contract,

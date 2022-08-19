@@ -5,7 +5,7 @@ import { ethers } from "hardhat";
 
 import { converter } from "../helpers/unit-converter";
 
-describe("106.Payable", () => {
+describe("028.Payable", () => {
   let payable: Contract;
   let deployer: SignerWithAddress,
     one: SignerWithAddress,

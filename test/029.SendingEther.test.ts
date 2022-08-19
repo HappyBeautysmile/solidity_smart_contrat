@@ -5,7 +5,7 @@ import { ethers } from "hardhat";
 
 import { converter } from "../helpers/unit-converter";
 
-describe("107.SendingEther", () => {
+describe("029.SendingEther", () => {
   let receiveEther: Contract, sendEther: Contract;
 
   before(async () => {
