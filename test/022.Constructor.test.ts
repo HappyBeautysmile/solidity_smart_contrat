@@ -11,7 +11,7 @@ describe("021.Constructor", () => {
     b002: Contract,
     c002: Contract,
     d002: Contract,
-    e: Contract;
+    e002: Contract;
   let deployer: SignerWithAddress, one: SignerWithAddress;
 
   before(async () => {
@@ -73,6 +73,19 @@ describe("021.Constructor", () => {
       console.log("receipt", receipt);
       expect(Object.keys(receipt.interface.events)).to.deep.equal([
         "DCall()",
+        "XCall()",
+        "YCall()",
+      ]);
+    });
+
+    it("Function : E002 : constructor", async () => {
+      const E002 = await ethers.getContractFactory("E002");
+      e002 = await E002.deploy();
+      const receipt = await e002.deployed();
+
+      console.log("receipt", receipt);
+      expect(Object.keys(receipt.interface.events)).to.deep.equal([
+        "ECall()",
         "XCall()",
         "YCall()",
       ]);
