@@ -6,6 +6,7 @@ Minimal Proxy Contracts
 
 If you have a contract that will be deployed multiple times,
 use minimal proxy contract to deploy them cheaply.
+
 */
 contract MinimalProxy {
     function clone(address _target) external returns (address result) {
